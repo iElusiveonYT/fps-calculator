@@ -3,56 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FPS Calculator - Atlas OS Dark Mode</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>FPS Calculator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Roboto Mono', monospace;
+    background: #121212;
+    color: #e0e0e0;
+    overflow-x: hidden;
+  }
+
+  /* Parallax background layers */
+  .parallax {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, #1f1f1f, #121212);
+    z-index: -2;
+    animation: move 60s linear infinite;
+  }
+
+  @keyframes move {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, 20px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  select {
+    padding: 0.5rem;
+    margin: 0.5rem;
+    background: #1f1f1f;
+    color: #e0e0e0;
+    border: 1px solid #333;
+    border-radius: 5px;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    background: #1e1e1ecc;
+    border-radius: 15px;
+    padding: 1rem;
+    margin: 1rem;
+    box-shadow: 0 0 20px #00000088;
+    flex: 1 1 400px;
+  }
+
+  canvas {
+    width: 100%;
+    height: 300px;
+  }
+
+  .avg-fps {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: #888;
+  }
+</style>
 </head>
 <body>
-
-<div class="parallax">
-  <div class="layer layer1"></div>
-  <div class="layer layer2"></div>
-  <div class="layer layer3"></div>
-</div>
-<canvas class="particles" id="particleCanvas"></canvas>
-
+<div class="parallax"></div>
 <div class="container">
-  <div class="card">
-    <label for="game">Game</label>
-    <select id="game">
-      <option>Warzone</option>
+  <h1>FPS Calculator</h1>
+  <div class="controls">
+    <select id="gameSelect">
+      <option value="warzone">Warzone</option>
+      <option value="valorant">Valorant</option>
+      <option value="cs2">CS2</option>
+      <option value="fortnite">Fortnite</option>
+      <option value="apex">Apex Legends</option>
+      <option value="blackops7">Black Ops 7</option>
     </select>
 
-    <label for="resolution">Resolution</label>
-    <select id="resolution">
-      <option>1080p</option>
-      <option>1440p</option>
-      <option>4K</option>
-    </select>
-
-    <label for="cpu">CPU</label>
-    <input type="text" id="cpu-search" placeholder="Search CPU...">
-    <select id="cpu"></select>
-
-    <label for="gpu">GPU</label>
-    <input type="text" id="gpu-search" placeholder="Search GPU...">
-    <select id="gpu"></select>
-
-    <label for="ram">RAM/PBO Boost (%)</label>
-    <input type="range" id="ram" min="0" max="20" value="0">
-    <div id="ramVal">0%</div>
-
-    <div class="fps-display" id="fps">FPS: 0</div>
-    <canvas id="fpsChart" width="400" height="200"></canvas>
+    <select id="cpuSelect"></select>
+    <select id="gpuSelect"></select>
   </div>
 
-  <div class="sidebar">
-    <h3>Avg FPS in Popular Games</h3>
-    <div><span>Warzone</span><span id="avgWarzone">0</span></div>
+  <div class="card">
+    <canvas id="fpsChart"></canvas>
+    <div class="avg-fps" id="avgFps">Average FPS: -</div>
   </div>
 </div>
 
-<script src="js/main.js"></script>
+<footer>FPS data from TechSpot. Max realistic at competitive settings.</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let cpuSelect = document.getElementById('cpuSelect');
+let gpuSelect = document.getElementById('gpuSelect');
+let gameSelect = document.getElementById('gameSelect');
+let avgFpsEl = document.getElementById('avgFps');
+let chart;
+
+const resolutions = ['1080p', '1440p', '4K'];
+
+// Preload JSON data
+let gameData = {};
+
+async function loadJSON(game) {
+  const res = await fetch(`data/${game}.json`);
+  gameData[game] = await res.json();
+}
+
+// Populate CPU/GPU selects
+function populateDropdowns(game) {
+  cpuSelect.innerHTML = '';
+  gpuSelect.innerHTML = '';
+
+  const cpus = Object.keys(gameData[game]['1080p'].CPUs).sort();
+  const gpus = Object.keys(gameData[game]['1080p'].GPUs).sort();
+
+  cpus.forEach(c => { cpuSelect.add(new Option(c, c)); });
+  gpus.forEach(g => { gpuSelect.add(new Option(g, g)); });
+}
+
+// Update chart
+function updateChart() {
+  const game = gameSelect.value;
+  const cpu = cpuSelect.value;
+  const gpu = gpuSelect.value;
+
+  let fpsValues = resolutions.map(res => {
+    const cpuFps = gameData[game][res].CPUs[cpu];
+    const gpuFps = gameData[game][res].GPUs[gpu];
+    // FPS limited by bottleneck
+    return Math.min(cpuFps, gpuFps);
+  });
+
+  avgFpsEl.textContent = `Average FPS: ${Math.round(fpsValues.reduce((a,b)=>a+b,0)/fpsValues.length)}`;
+
+  if(chart) chart.destroy();
+
+  const ctx = document.getElementById('fpsChart').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: resolutions,
+      datasets: [{
+        label: 'FPS',
+        data: fpsValues,
+        backgroundColor: '#3a3a3a'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// Initial load
+async function init() {
+  const games = ['warzone','valorant','cs2','fortnite','apex','blackops7'];
+  for(const g of games) await loadJSON(g);
+  populateDropdowns('warzone');
+  updateChart();
+}
+
+// Event listeners
+gameSelect.addEventListener('change', () => {
+  populateDropdowns(gameSelect.value);
+  updateChart();
+});
+cpuSelect.addEventListener('change', updateChart);
+gpuSelect.addEventListener('change', updateChart);
+
+init();
+</script>
 </body>
 </html>
