@@ -97,3 +97,17 @@ const particles=[];
 for(let i=0;i<100;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,speed:Math.random()*0.5+0.1});}
 function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.y-=p.speed;if(p.y<0)p.y=canvas.height;ctx.fillStyle='#1a1a1a';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();});requestAnimationFrame(animateParticles);}
 animateParticles();
+
+window.addEventListener('load', () => {
+  const cards = document.querySelectorAll('.card, .sidebar');
+  cards.forEach((el, i) => {
+    el.style.opacity = 0;
+    el.style.transform += ' translateY(20px)';
+    setTimeout(() => {
+      el.style.transition = 'all 1s ease';
+      el.style.opacity = 1;
+      el.style.transform = el.style.transform.replace(' translateY(20px)','');
+    }, i * 200);
+  });
+});
+
