@@ -111,3 +111,23 @@ window.addEventListener('load', () => {
   });
 });
 
+function updateTopComponents(game){
+  const cpus = Object.entries(gameData[game]['1080p'].CPUs)
+    .map(([name,val])=>({
+      name,
+      avg:(gameData[game]['1080p'].CPUs[name]+gameData[game]['1440p'].CPUs[name]+gameData[game]['4K'].CPUs[name])/3,
+      details: `1080p: ${gameData[game]['1080p'].CPUs[name]} FPS\n1440p: ${gameData[game]['1440p'].CPUs[name]} FPS\n4K: ${gameData[game]['4K'].CPUs[name]} FPS`
+    }))
+    .sort((a,b)=>b.avg-a.avg).slice(0,3);
+
+  const gpus = Object.entries(gameData[game]['1080p'].GPUs)
+    .map(([name,val])=>({
+      name,
+      avg:(gameData[game]['1080p'].GPUs[name]+gameData[game]['1440p'].GPUs[name]+gameData[game]['4K'].GPUs[name])/3,
+      details: `1080p: ${gameData[game]['1080p'].GPUs[name]} FPS\n1440p: ${gameData[game]['1440p'].GPUs[name]} FPS\n4K: ${gameData[game]['4K'].GPUs[name]} FPS`
+    }))
+    .sort((a,b)=>b.avg-a.avg).slice(0,3);
+
+  topCPUs.innerHTML = cpus.map(c=>`<li>${c.name} (${Math.round(c.avg)} FPS)<div class="tooltip">${c.details.replace(/\n/g,'<br>')}</div></li>`).join('');
+  topGPUs.innerHTML = gpus.map(g=>`<li>${g.name} (${Math.round(g.avg)} FPS)<div class="tooltip">${g.details.replace(/\n/g,'<br>')}</div></li>`).join('');
+}
