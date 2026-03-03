@@ -80,8 +80,29 @@ canvas { width: 100%; height: 250px; }
 .sidebar { animation: floatUpDown 8s ease-in-out infinite; }
 .sidebar h2 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.2rem; text-align: center; }
 .sidebar ul { list-style: none; padding-left: 0; }
-.sidebar li { padding: 0.3rem 0; border-bottom: 1px solid #333; transition: 0.2s; }
+.sidebar li { position: relative; padding: 0.3rem 0; border-bottom: 1px solid #333; transition: 0.2s; }
 .sidebar li:hover { background: #2a2a2a; cursor: pointer; transform: translateX(5px); }
+
+/* ------------------- Tooltip ------------------- */
+.sidebar li .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: 140px;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  text-align: left;
+  padding: 0.5rem;
+  border-radius: 8px;
+  position: absolute;
+  left: 105%;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 5px 15px #000000aa;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  font-size: 0.8rem;
+}
+.sidebar li:hover .tooltip { visibility: visible; opacity: 1; }
 
 /* ------------------- Footer ------------------- */
 footer { text-align: center; margin-top: 2rem; font-size: 0.8rem; color: #888; }
@@ -164,17 +185,26 @@ function populateDropdowns(game){
   gpus.forEach(g=>gpuSelect.add(new Option(g,g)));
 }
 
-// Sidebar top CPUs/GPUs
+// Sidebar top CPUs/GPUs with tooltip
 function updateTopComponents(game){
   const cpus = Object.entries(gameData[game]['1080p'].CPUs)
-    .map(([name,val])=>({name, avg:(gameData[game]['1080p'].CPUs[name]+gameData[game]['1440p'].CPUs[name]+gameData[game]['4K'].CPUs[name])/3}))
-    .sort((a,b)=>b.avg-a.avg).slice(0,3);
-  const gpus = Object.entries(gameData[game]['1080p'].GPUs)
-    .map(([name,val])=>({name, avg:(gameData[game]['1080p'].GPUs[name]+gameData[game]['1440p'].GPUs[name]+gameData[game]['4K'].GPUs[name])/3}))
+    .map(([name,val])=>({
+      name,
+      avg:(gameData[game]['1080p'].CPUs[name]+gameData[game]['1440p'].CPUs[name]+gameData[game]['4K'].CPUs[name])/3,
+      details: `1080p: ${gameData[game]['1080p'].CPUs[name]} FPS\n1440p: ${gameData[game]['1440p'].CPUs[name]} FPS\n4K: ${gameData[game]['4K'].CPUs[name]} FPS`
+    }))
     .sort((a,b)=>b.avg-a.avg).slice(0,3);
 
-  topCPUs.innerHTML = cpus.map(c=>`<li>${c.name} (${Math.round(c.avg)} FPS)</li>`).join('');
-  topGPUs.innerHTML = gpus.map(g=>`<li>${g.name} (${Math.round(g.avg)} FPS)</li>`).join('');
+  const gpus = Object.entries(gameData[game]['1080p'].GPUs)
+    .map(([name,val])=>({
+      name,
+      avg:(gameData[game]['1080p'].GPUs[name]+gameData[game]['1440p'].GPUs[name]+gameData[game]['4K'].GPUs[name])/3,
+      details: `1080p: ${gameData[game]['1080p'].GPUs[name]} FPS\n1440p: ${gameData[game]['1440p'].GPUs[name]} FPS\n4K: ${gameData[game]['4K'].GPUs[name]} FPS`
+    }))
+    .sort((a,b)=>b.avg-a.avg).slice(0,3);
+
+  topCPUs.innerHTML = cpus.map(c=>`<li>${c.name} (${Math.round(c.avg)} FPS)<div class="tooltip">${c.details.replace(/\n/g,'<br>')}</div></li>`).join('');
+  topGPUs.innerHTML = gpus.map(g=>`<li>${g.name} (${Math.round(g.avg)} FPS)<div class="tooltip">${g.details.replace(/\n/g,'<br>')}</div></li>`).join('');
 }
 
 // Update Chart & Summary
