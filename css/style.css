@@ -25,3 +25,51 @@ input[type=range]{accent-color:#4a90e2;}
 .sidebar div{font-size:14px;display:flex;justify-content:space-between;transition: color 0.3s ease;}
 
 @media(max-width:900px){.container{flex-direction:column;align-items:center;}.sidebar{width:90%;}.card{width:90%;}}
+
+@keyframes floatXY {
+  0% { transform: translate(0px, 0px); }
+  50% { transform: translate(5px, -5px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+#fpsChart {
+  animation: floatXY 10s ease-in-out infinite;
+}
+
+.sidebar li {
+  position: relative;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #333;
+  transition: 0.2s;
+}
+
+.sidebar li:hover { 
+  background: #2a2a2a; 
+  cursor: pointer; 
+  transform: translateX(5px);
+}
+
+/* Tooltip styling */
+.sidebar li .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: 140px;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  text-align: left;
+  padding: 0.5rem;
+  border-radius: 8px;
+  position: absolute;
+  left: 105%;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 5px 15px #000000aa;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  font-size: 0.8rem;
+}
+
+.sidebar li:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
