@@ -1,0 +1,9 @@
+@keyframes floatXY {
+  0% { transform: translate(0px, 0px); }
+  50% { transform: translate(5px, -5px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+#fpsChart {
+  animation: floatXY 10s ease-in-out infinite;
+}
