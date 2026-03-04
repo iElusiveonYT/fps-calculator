@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPS Calculator - Atlas OS Dark Mode</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="main.js"></script>
+</head>
+<body>
+
+<div class="parallax">
+  <div class="layer layer1"></div>
+  <div class="layer layer2"></div>
+  <div class="layer layer3"></div>
+</div>
+<canvas class="particles" id="particleCanvas"></canvas>
+
+<div class="container">
+  <div class="card">
+    <label for="game">Game</label>
+    <select id="game">
+      <option>Warzone</option>
+      <option>Valorant</option>
+      <option>CS2</option>
+      <option>Fortnite</option>
+      <option>Apex Legends</option>
+      <option>BlackOps7</option>
+    </select>
+
+    <label for="resolution">Resolution</label>
+    <select id="resolution">
+      <option>1080p</option>
+      <option>1440p</option>
+      <option>4K</option>
+    </select>
+
+    <label for="cpu">CPU</label>
+    <input type="text" id="cpu-search" placeholder="Search CPU...">
+    <select id="cpu"></select>
+
+    <label for="gpu">GPU</label>
+    <input type="text" id="gpu-search" placeholder="Search GPU...">
+    <select id="gpu"></select>
+
+    <label for="ram">RAM/PBO Boost (%)</label>
+    <input type="range" id="ram" min="0" max="20" value="0">
+    <div id="ramVal">0%</div>
+
+    <div class="fps-display" id="fps">FPS: 0</div>
+    <canvas id="fpsChart" width="400" height="200"></canvas>
+  </div>
+
+  <div class="sidebar">
+    <h3>Avg FPS in Popular Games</h3>
+    <div><span>Warzone</span><span id="avgWarzone">0</span></div>
+    <div><span>Valorant</span><span id="avgValorant">0</span></div>
+    <div><span>CS2</span><span id="avgCS2">0</span></div>
+    <div><span>Fortnite</span><span id="avgFortnite">0</span></div>
+    <div><span>Apex Legends</span><span id="avgApex">0</span></div>
+    <div><span>BlackOps7</span><span id="avgBO7">0</span></div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
