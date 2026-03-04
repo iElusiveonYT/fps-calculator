@@ -6,91 +6,11 @@
 <title>FPS Calculator</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-  body {
-    margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background:#121212;
-    color:#e0e0e0;
-    overflow-x:hidden;
-  }
-
-  .container {
-    max-width:1200px;
-    margin:0 auto;
-    padding:20px;
-  }
-
-  h1,h2 {margin-bottom:10px;}
-  
-  select {
-    background:#1f1f1f;
-    color:#e0e0e0;
-    border:none;
-    padding:5px 10px;
-    margin-right:10px;
-    border-radius:5px;
-  }
-
-  .summary {
-    display:flex;
-    gap:20px;
-    margin-bottom:20px;
-  }
-
-  .card {
-    background:#1f1f1f;
-    border:1px solid #2c2c2c;
-    border-radius:10px;
-    padding:15px;
-    flex:1;
-    transition: transform 0.1s;
-    position:relative;
-  }
-
-  .card:hover {
-    border-color:#444;
-  }
-
-  .tooltip {
-    display:none;
-    position:absolute;
-    background:#222;
-    padding:5px 10px;
-    border-radius:5px;
-    top:100%;
-    left:0;
-    white-space:pre-line;
-    font-size:12px;
-  }
-
-  li:hover .tooltip {
-    display:block;
-  }
-
-  ul {padding-left:15px;}
-
-  canvas {
-    background:#1f1f1f;
-    border-radius:10px;
-    margin-bottom:20px;
-  }
-
-  .charts {
-    display:flex;
-    gap:20px;
-    flex-wrap:wrap;
-  }
-
-  .charts canvas {
-    flex:1 1 400px;
-  }
-</style>
 </head>
 <body>
 <div class="container">
   <h1>FPS Calculator</h1>
-  
+
   <div class="controls">
     <select id="gameSelect"></select>
     <select id="cpuSelect"></select>
@@ -121,13 +41,12 @@
   <div class="charts">
     <div class="card">
       <h2>Main FPS Chart</h2>
-      <canvas id="fpsChart" width="400" height="250"></canvas>
+      <canvas id="fpsChart"></canvas>
     </div>
 
     <div class="card">
       <h2>Detail Chart</h2>
-      <canvas id="detailChart" width="400" height="250"></canvas>
-
+      <canvas id="detailChart"></canvas>
       <p>Min FPS: <span id="min1080">-</span> | <span id="min1440">-</span> | <span id="min4k">-</span></p>
       <p>Avg FPS: <span id="avg1080b">-</span> | <span id="avg1440b">-</span> | <span id="avg4kb">-</span></p>
       <p>Max FPS: <span id="max1080">-</span> | <span id="max1440">-</span> | <span id="max4k">-</span></p>
