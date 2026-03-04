@@ -111,3 +111,11 @@ footer { text-align:center; margin-top:2rem; font-size:0.8rem; color:#888; }
     background-position:200% 0%;
   }
 }
+
+.card{
+  --mx: 0px;
+  --my: 0px;
+
+  transform: translate3d(var(--mx), var(--my), 0);
+  transition: transform 0.08s linear;
+}
