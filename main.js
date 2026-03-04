@@ -1,4 +1,18 @@
-const cpuSelect = document.getElementById('cpuSelect');
+let detailChart;
+
+const min1080 = document.getElementById('min1080');
+const min1440 = document.getElementById('min1440');
+const min4k   = document.getElementById('min4k');
+
+const max1080 = document.getElementById('max1080');
+const max1440 = document.getElementById('max1440');
+const max4k   = document.getElementById('max4k');
+
+const avg1080b = document.getElementById('avg1080b');
+const avg1440b = document.getElementById('avg1440b');
+const avg4kb   = document.getElementById('avg4kb');
+
+const playabilityText = document.getElementById('playabilityText');const cpuSelect = document.getElementById('cpuSelect');
 const gpuSelect = document.getElementById('gpuSelect');
 const gameSelect = document.getElementById('gameSelect');
 const avg1080 = document.getElementById('avg1080');
@@ -37,12 +51,21 @@ function updateTopComponents(game){
 }
 
 function updateChart(){
-  const game = gameSelect.value;
-  const cpu = cpuSelect.value;
-  const gpu = gpuSelect.value;
-  const cpuValues = resolutions.map(r=>gameData[game][r].CPUs[cpu]);
-  const gpuValues = resolutions.map(r=>gameData[game][r].GPUs[gpu]);
-  const minValues = resolutions.map((v,i)=>Math.min(cpuValues[i], gpuValues[i]));
+  let detailChart;
+
+const min1080 = document.getElementById('min1080');
+const min1440 = document.getElementById('min1440');
+const min4k   = document.getElementById('min4k');
+
+const max1080 = document.getElementById('max1080');
+const max1440 = document.getElementById('max1440');
+const max4k   = document.getElementById('max4k');
+
+const avg1080b = document.getElementById('avg1080b');
+const avg1440b = document.getElementById('avg1440b');
+const avg4kb   = document.getElementById('avg4kb');
+
+const playabilityText = document.getElementById('playabilityText');
 
   avg1080.textContent=Math.round(minValues[0]);
   avg1440.textContent=Math.round(minValues[1]);
