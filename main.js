@@ -1,9 +1,12 @@
+// ================== HELPER ==================
+
+// Safely set textContent without crashing if element doesn't exist
 function setText(id, value){
   const el = document.getElementById(id);
   if(el) el.textContent = value;
-  
-  // ================== DOM ==================
+}
 
+// ================== DOM ELEMENTS ==================
 const cpuSelect = document.getElementById('cpuSelect');
 const gpuSelect = document.getElementById('gpuSelect');
 const gameSelect = document.getElementById('gameSelect');
@@ -32,27 +35,22 @@ const avg4kb   = document.getElementById('avg4kb');
 const playabilityText = document.getElementById('playabilityText');
 
 // ================== DATA ==================
-
 const resolutions = ['1080p','1440p','4K'];
-
 let gameData = {};
 let chart;
 let detailChart;
 
-// ================== LOAD ==================
-
+// ================== LOAD JSON ==================
 async function loadJSON(game){
   const res = await fetch(`data/${game}.json`);
   gameData[game] = await res.json();
 }
 
-// ================== UI ==================
-
+// ================== DROPDOWN ==================
 function populateDropdowns(game){
-
   cpuSelect.innerHTML = '';
   gpuSelect.innerHTML = '';
-
+  
   const cpus = Object.keys(gameData[game]['1080p'].CPUs).sort();
   const gpus = Object.keys(gameData[game]['1080p'].GPUs).sort();
 
@@ -60,61 +58,40 @@ function populateDropdowns(game){
   gpus.forEach(g => gpuSelect.add(new Option(g,g)));
 }
 
-
-// ================== SIDEBAR ==================
-
+// ================== TOP COMPONENTS ==================
 function updateTopComponents(game){
-
   const cpus = Object.keys(gameData[game]['1080p'].CPUs).map(name => {
-
-    const avg =
-      (gameData[game]['1080p'].CPUs[name] +
-       gameData[game]['1440p'].CPUs[name] +
-       gameData[game]['4K'].CPUs[name]) / 3;
-
-    const details =
-      `1080p: ${gameData[game]['1080p'].CPUs[name]} FPS\n` +
-      `1440p: ${gameData[game]['1440p'].CPUs[name]} FPS\n` +
-      `4K: ${gameData[game]['4K'].CPUs[name]} FPS`;
-
+    const avg = (gameData[game]['1080p'].CPUs[name] +
+                 gameData[game]['1440p'].CPUs[name] +
+                 gameData[game]['4K'].CPUs[name]) / 3;
+    const details = `1080p: ${gameData[game]['1080p'].CPUs[name]} FPS\n` +
+                    `1440p: ${gameData[game]['1440p'].CPUs[name]} FPS\n` +
+                    `4K: ${gameData[game]['4K'].CPUs[name]} FPS`;
     return { name, avg, details };
-  })
-  .sort((a,b)=>b.avg-a.avg)
-  .slice(0,3);
+  }).sort((a,b)=>b.avg-a.avg).slice(0,3);
 
   const gpus = Object.keys(gameData[game]['1080p'].GPUs).map(name => {
-
-    const avg =
-      (gameData[game]['1080p'].GPUs[name] +
-       gameData[game]['1440p'].GPUs[name] +
-       gameData[game]['4K'].GPUs[name]) / 3;
-
-    const details =
-      `1080p: ${gameData[game]['1080p'].GPUs[name]} FPS\n` +
-      `1440p: ${gameData[game]['1440p'].GPUs[name]} FPS\n` +
-      `4K: ${gameData[game]['4K'].GPUs[name]} FPS`;
-
+    const avg = (gameData[game]['1080p'].GPUs[name] +
+                 gameData[game]['1440p'].GPUs[name] +
+                 gameData[game]['4K'].GPUs[name]) / 3;
+    const details = `1080p: ${gameData[game]['1080p'].GPUs[name]} FPS\n` +
+                    `1440p: ${gameData[game]['1440p'].GPUs[name]} FPS\n` +
+                    `4K: ${gameData[game]['4K'].GPUs[name]} FPS`;
     return { name, avg, details };
-  })
-  .sort((a,b)=>b.avg-a.avg)
-  .slice(0,3);
+  }).sort((a,b)=>b.avg-a.avg).slice(0,3);
 
   topCPUs.innerHTML = cpus.map(c =>
     `<li>${c.name} (${Math.round(c.avg)} FPS)
-      <div class="tooltip">${c.details.replace(/\n/g,'<br>')}</div>
-    </li>`
-  ).join('');
+       <div class="tooltip">${c.details.replace(/\n/g,'<br>')}</div>
+    </li>`).join('');
 
   topGPUs.innerHTML = gpus.map(g =>
     `<li>${g.name} (${Math.round(g.avg)} FPS)
-      <div class="tooltip">${g.details.replace(/\n/g,'<br>')}</div>
-    </li>`
-  ).join('');
+       <div class="tooltip">${g.details.replace(/\n/g,'<br>')}</div>
+    </li>`).join('');
 }
 
-
-// ================== MAIN UPDATE ==================
-
+// ================== UPDATE CHART ==================
 function updateChart(){
 
   const game = gameSelect.value;
@@ -126,33 +103,31 @@ function updateChart(){
   const cpuValues = resolutions.map(r => gameData[game][r].CPUs[cpu]);
   const gpuValues = resolutions.map(r => gameData[game][r].GPUs[gpu]);
 
-  // ✅ define them FIRST (this fixes your error)
+  // ✅ Define FIRST
   const minValues = cpuValues.map((v,i)=>Math.min(v, gpuValues[i]));
   const maxValues = cpuValues.map((v,i)=>Math.max(v, gpuValues[i]));
   const avgValues = cpuValues.map((v,i)=>Math.round((v + gpuValues[i]) / 2));
 
-  // ---- quick result numbers (bottleneck FPS)
+  // ---- Quick summary
   setText('avg1080', minValues[0]);
-setText('avg1440', minValues[1]);
-setText('avg4k',   minValues[2]);
+  setText('avg1440', minValues[1]);
+  setText('avg4k',   minValues[2]);
 
-setText('min1080', minValues[0]);
-setText('min1440', minValues[1]);
-setText('min4k',   minValues[2]);
+  // ---- Detailed summary
+  setText('min1080', minValues[0]);
+  setText('min1440', minValues[1]);
+  setText('min4k',   minValues[2]);
 
-setText('max1080', maxValues[0]);
-setText('max1440', maxValues[1]);
-setText('max4k',   maxValues[2]);
+  setText('max1080', maxValues[0]);
+  setText('max1440', maxValues[1]);
+  setText('max4k',   maxValues[2]);
 
-setText('avg1080b', avgValues[0]);
-setText('avg1440b', avgValues[1]);
-setText('avg4kb',   avgValues[2]);
+  setText('avg1080b', avgValues[0]);
+  setText('avg1440b', avgValues[1]);
+  setText('avg4kb',   avgValues[2]);
 
-setText('playabilityText', rating);
-
-  // ---- playability (based on 1440p bottleneck)
-  const p = minValues[1];
-
+  // ---- Playability
+  const p = minValues[1]; // focus on 1440p
   let rating;
   if(p >= 240) rating = "Elite competitive experience";
   else if(p >= 165) rating = "Excellent competitive experience";
@@ -160,115 +135,80 @@ setText('playabilityText', rating);
   else if(p >= 90)  rating = "Playable and smooth";
   else if(p >= 60)  rating = "Playable but not ideal for competitive";
   else rating = "Performance limited for competitive play";
+  setText('playabilityText', rating);
 
-  playabilityText.textContent = rating;
-
-  // ---- bottleneck type (4K)
+  // ---- Bottleneck (4K)
   const i = 2;
+  if(cpuValues[i] < gpuValues[i]) setText('recommendation', "Recommendation: CPU-limited");
+  else if(cpuValues[i] > gpuValues[i]) setText('recommendation', "Recommendation: GPU-limited");
+  else setText('recommendation', "Recommendation: Balanced");
 
-  if(cpuValues[i] < gpuValues[i])
-    recommendation.textContent = "Recommendation: CPU-limited";
-  else if(cpuValues[i] > gpuValues[i])
-    recommendation.textContent = "Recommendation: GPU-limited";
-  else
-    recommendation.textContent = "Recommendation: Balanced";
-
+  // ---- Sidebar
   updateTopComponents(game);
 
-  // ---- main chart
+  // ---- Main chart
   if(chart) chart.destroy();
-
   const ctx = document.getElementById('fpsChart').getContext('2d');
-
   chart = new Chart(ctx,{
     type:'bar',
     data:{
       labels:resolutions,
       datasets:[
-        { label:'CPU FPS', data:cpuValues, borderRadius:10 },
-        { label:'GPU FPS', data:gpuValues, borderRadius:10 },
-        { label:'Min (Bottleneck)', data:minValues, borderRadius:10 }
+        { label:'CPU FPS', data:cpuValues, backgroundColor:'rgba(58,58,58,0.9)', borderRadius:10 },
+        { label:'GPU FPS', data:gpuValues, backgroundColor:'rgba(85,85,85,0.9)', borderRadius:10 },
+        { label:'Min (Bottleneck)', data:minValues, backgroundColor:'rgba(136,136,136,0.9)', borderRadius:10 }
       ]
     },
-    options:{
-      responsive:true,
-      animation:{duration:900},
-      scales:{y:{beginAtZero:true}}
-    }
+    options:{ responsive:true, animation:{duration:900}, scales:{y:{beginAtZero:true}} }
   });
 
-  // ---- detail chart
+  // ---- Detail chart
   if(detailChart) detailChart.destroy();
-
   const ctx2 = document.getElementById('detailChart').getContext('2d');
-
   detailChart = new Chart(ctx2,{
     type:'bar',
     data:{
       labels:resolutions,
       datasets:[
-        { label:'Min FPS', data:minValues, borderRadius:8 },
-        { label:'Avg FPS', data:avgValues, borderRadius:8 },
-        { label:'Max FPS', data:maxValues, borderRadius:8 }
+        { label:'Min FPS', data:minValues, backgroundColor:'rgba(90,90,90,0.9)', borderRadius:8 },
+        { label:'Avg FPS', data:avgValues, backgroundColor:'rgba(130,130,130,0.9)', borderRadius:8 },
+        { label:'Max FPS', data:maxValues, backgroundColor:'rgba(170,170,170,0.9)', borderRadius:8 }
       ]
     },
-    options:{
-      responsive:true,
-      scales:{y:{beginAtZero:true}}
-    }
+    options:{ responsive:true, scales:{y:{beginAtZero:true}} }
   });
+
 }
 
-
 // ================== INIT ==================
-
 async function init(){
-
   const games = ['warzone','valorant','cs2','fortnite','apex','blackops7'];
-
-  for(const g of games)
-    await loadJSON(g);
-
+  for(const g of games) await loadJSON(g);
   populateDropdowns(gameSelect.value);
   updateChart();
 }
 
-
-// ================== EVENTS ==================
-
+// ================== EVENT LISTENERS ==================
 gameSelect.addEventListener('change', ()=>{
   populateDropdowns(gameSelect.value);
   updateChart();
 });
-
 cpuSelect.addEventListener('change', updateChart);
 gpuSelect.addEventListener('change', updateChart);
 
-
 // ================== MOUSE PARALLAX ==================
-
 const cards = document.querySelectorAll('.card');
-
-document.addEventListener('mousemove', e => {
-
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
-
-  const dx = (e.clientX - cx) / cx;
-  const dy = (e.clientY - cy) / cy;
-
-  cards.forEach(card => {
-
-    const depth = 8;
-
-    card.style.setProperty('--mx', `${dx * depth}px`);
-    card.style.setProperty('--my', `${dy * depth}px`);
-
+document.addEventListener('mousemove', e=>{
+  const cx = window.innerWidth/2;
+  const cy = window.innerHeight/2;
+  const dx = (e.clientX-cx)/cx;
+  const dy = (e.clientY-cy)/cy;
+  cards.forEach(card=>{
+    const depth=8;
+    card.style.setProperty('--mx', `${dx*depth}px`);
+    card.style.setProperty('--my', `${dy*depth}px`);
   });
-
 });
 
-
 // ================== START ==================
-
 init();
