@@ -61,3 +61,53 @@ footer { text-align:center; margin-top:2rem; font-size:0.8rem; color:#888; }
   margin-bottom:1rem;
   line-height:1.6;
 }
+/* ===== AtlasOS-style moving white outline ===== */
+
+.card,
+.sidebar{
+  position: relative;
+  overflow: hidden;
+}
+
+/* animated border layer */
+.card::before,
+.sidebar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:20px;
+  padding:1px;                 /* line thickness */
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,0.9),
+      transparent
+    );
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  opacity:0;
+  pointer-events:none;
+}
+
+/* activate on hover */
+.card:hover::before,
+.sidebar:hover::before{
+  opacity:0.8;
+  animation: atlas-line 1.6s linear infinite;
+}
+
+@keyframes atlas-line{
+  from{
+    background-position:0% 0%;
+  }
+  to{
+    background-position:200% 0%;
+  }
+}
