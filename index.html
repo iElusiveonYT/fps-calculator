@@ -4,65 +4,137 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FPS Calculator</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body {
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background:#121212;
+    color:#e0e0e0;
+    overflow-x:hidden;
+  }
+
+  .container {
+    max-width:1200px;
+    margin:0 auto;
+    padding:20px;
+  }
+
+  h1,h2 {margin-bottom:10px;}
+  
+  select {
+    background:#1f1f1f;
+    color:#e0e0e0;
+    border:none;
+    padding:5px 10px;
+    margin-right:10px;
+    border-radius:5px;
+  }
+
+  .summary {
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+  }
+
+  .card {
+    background:#1f1f1f;
+    border:1px solid #2c2c2c;
+    border-radius:10px;
+    padding:15px;
+    flex:1;
+    transition: transform 0.1s;
+    position:relative;
+  }
+
+  .card:hover {
+    border-color:#444;
+  }
+
+  .tooltip {
+    display:none;
+    position:absolute;
+    background:#222;
+    padding:5px 10px;
+    border-radius:5px;
+    top:100%;
+    left:0;
+    white-space:pre-line;
+    font-size:12px;
+  }
+
+  li:hover .tooltip {
+    display:block;
+  }
+
+  ul {padding-left:15px;}
+
+  canvas {
+    background:#1f1f1f;
+    border-radius:10px;
+    margin-bottom:20px;
+  }
+
+  .charts {
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+
+  .charts canvas {
+    flex:1 1 400px;
+  }
+</style>
 </head>
 <body>
-
-<div class="parallax-line"></div>
-
 <div class="container">
-  <div class="main">
-    <h1>FPS Calculator</h1>
-    <div class="controls">
-      <select id="gameSelect">
-        <option value="warzone">Warzone</option>
-        <option value="valorant">Valorant</option>
-        <option value="cs2">CS2</option>
-        <option value="fortnite">Fortnite</option>
-        <option value="apex">Apex Legends</option>
-        <option value="blackops7">Black Ops 7</option>
-      </select>
-      <select id="cpuSelect"></select>
-      <select id="gpuSelect"></select>
+  <h1>FPS Calculator</h1>
+  
+  <div class="controls">
+    <select id="gameSelect"></select>
+    <select id="cpuSelect"></select>
+    <select id="gpuSelect"></select>
+  </div>
+
+  <div class="summary">
+    <div class="card">
+      <h2>Bottleneck FPS</h2>
+      <p>1080p: <span id="avg1080">-</span></p>
+      <p>1440p: <span id="avg1440">-</span></p>
+      <p>4K: <span id="avg4k">-</span></p>
+      <p id="playabilityText"></p>
+      <p id="recommendation"></p>
     </div>
 
     <div class="card">
-      <canvas id="fpsChart"></canvas>
-      <div class="summary-cards">
-        <div class="card">1080p Avg: <span id="avg1080">-</span> FPS</div>
-        <div class="card">1440p Avg: <span id="avg1440">-</span> FPS</div>
-        <div class="card">4K Avg: <span id="avg4k">-</span> FPS</div>
-      </div>
-      <div class="recommendation" id="recommendation">Recommendation: -</div>
+      <h2>Top CPUs</h2>
+      <ul id="topCPUs"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Top GPUs</h2>
+      <ul id="topGPUs"></ul>
     </div>
   </div>
 
-  <div class="sidebar">
-    <h2>Top CPUs</h2>
-    <ul id="topCPUs"></ul>
-    <h2>Top GPUs</h2>
-    <ul id="topGPUs"></ul>
+  <div class="charts">
+    <div class="card">
+      <h2>Main FPS Chart</h2>
+      <canvas id="fpsChart" width="400" height="250"></canvas>
+    </div>
+
+    <div class="card">
+      <h2>Detail Chart</h2>
+      <canvas id="detailChart" width="400" height="250"></canvas>
+
+      <p>Min FPS: <span id="min1080">-</span> | <span id="min1440">-</span> | <span id="min4k">-</span></p>
+      <p>Avg FPS: <span id="avg1080b">-</span> | <span id="avg1440b">-</span> | <span id="avg4kb">-</span></p>
+      <p>Max FPS: <span id="max1080">-</span> | <span id="max1440">-</span> | <span id="max4k">-</span></p>
+    </div>
   </div>
 </div>
 
-<footer>FPS data from TechSpot. Max realistic at competitive settings.</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="main.js"></script>
+<script src="main.js" defer></script>
 </body>
 </html>
-
-<div class="card">
-  <h3>Playability & FPS Summary</h3>
-
-  <div class="playability" id="playabilityText">-</div>
-
-  <div class="fps-summary-grid">
-    <div>1080p → Min: <span id="min1080">-</span> | Avg: <span id="avg1080b">-</span> | Max: <span id="max1080">-</span></div>
-    <div>1440p → Min: <span id="min1440">-</span> | Avg: <span id="avg1440b">-</span> | Max: <span id="max1440">-</span></div>
-    <div>4K → Min: <span id="min4k">-</span> | Avg: <span id="avg4kb">-</span> | Max: <span id="max4k">-</span></div>
-  </div>
-
-  <canvas id="detailChart"></canvas>
-</div>
