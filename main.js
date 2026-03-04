@@ -48,14 +48,13 @@ async function loadJSON(game){
 
 // ================== DROPDOWN ==================
 function populateDropdowns(game){
-  cpuSelect.innerHTML = '';
-  gpuSelect.innerHTML = '';
-  
+  if(!gameData[game]) return; // <--- safety check
+  cpuSelect.innerHTML='';
+  gpuSelect.innerHTML='';
   const cpus = Object.keys(gameData[game]['1080p'].CPUs).sort();
   const gpus = Object.keys(gameData[game]['1080p'].GPUs).sort();
-
-  cpus.forEach(c => cpuSelect.add(new Option(c,c)));
-  gpus.forEach(g => gpuSelect.add(new Option(g,g)));
+  cpus.forEach(c=>cpuSelect.add(new Option(c,c)));
+  gpus.forEach(g=>gpuSelect.add(new Option(g,g)));
 }
 
 // ================== TOP COMPONENTS ==================
