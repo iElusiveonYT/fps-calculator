@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPS Calculator</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div id="animated-bg"></div> <!-- animated background -->
+
+  <div class="container">
+    <h1>FPS Calculator</h1>
+
+    <div class="controls">
+      <select id="gameSelect"></select>
+      <select id="cpuSelect"></select>
+      <select id="gpuSelect"></select>
+    </div>
+
+    <div class="summary">
+      <div class="card">
+        <h2>FPS Summary</h2>
+        <p>1080p Avg: <span id="avg1080">-</span></p>
+        <p>1440p Avg: <span id="avg1440">-</span></p>
+        <p>4K Avg: <span id="avg4k">-</span></p>
+        <p id="playabilityText"></p>
+        <p id="recommendation"></p>
+      </div>
+
+      <div class="card">
+        <h2>Top CPUs</h2>
+        <ul id="topCPUs"></ul>
+      </div>
+
+      <div class="card">
+        <h2>Top GPUs</h2>
+        <ul id="topGPUs"></ul>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="card">
+        <h2>Main FPS Chart</h2>
+        <canvas id="fpsChart"></canvas>
+      </div>
+
+      <div class="card">
+        <h2>Detail Chart</h2>
+        <canvas id="detailChart"></canvas>
+        <p>Min FPS: <span id="min1080">-</span> | <span id="min1440">-</span> | <span id="min4k">-</span></p>
+        <p>Avg FPS: <span id="avg1080b">-</span> | <span id="avg1440b">-</span> | <span id="avg4kb">-</span></p>
+        <p>Max FPS: <span id="max1080">-</span> | <span id="max1440">-</span> | <span id="max4k">-</span></p>
+      </div>
+    </div>
+  </div>
+
+<script src="main.js" defer></script>
+</body>
+</html>
