@@ -106,3 +106,27 @@ cpuSelect.addEventListener('change', updateChart);
 gpuSelect.addEventListener('change', updateChart);
 
 init();
+
+const cards = document.querySelectorAll('.card');
+
+document.addEventListener('mousemove', e => {
+
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+
+  const dx = (e.clientX - cx) / cx;
+  const dy = (e.clientY - cy) / cy;
+
+  cards.forEach(card => {
+
+    const depth = 8; // how strong the effect is (keep this small)
+
+    const x = dx * depth;
+    const y = dy * depth;
+
+    card.style.setProperty('--mx', `${x}px`);
+    card.style.setProperty('--my', `${y}px`);
+
+  });
+
+});
