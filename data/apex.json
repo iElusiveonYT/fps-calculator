@@ -1,50 +1,14 @@
 {
   "1080p": {
-    "CPUs": {
-      "Ryzen 3 3100": 200,"Ryzen 3 3300X": 220,"Ryzen 5 3600": 250,"Ryzen 5 5600X": 270,
-      "Ryzen 7 3700X": 290,"Ryzen 7 5800X": 310,"Ryzen 9 5900X": 340,"Ryzen 9 7900X": 360,"Ryzen 9 7950X": 380,
-      "Intel i5-10400": 240,"Intel i5-11400": 260,"Intel i5-12400": 280,"Intel i5-13400": 300,"Intel i5-14400": 320,
-      "Intel i7-10700K": 300,"Intel i7-11700K": 320,"Intel i7-12700K": 340,"Intel i7-13700K": 360,"Intel i7-14700K": 380,
-      "Intel i9-10900K": 340,"Intel i9-11900K": 360,"Intel i9-12900K": 380,"Intel i9-13900K": 400,"Intel i9-14900K": 420,
-      "Intel Core Ultra i7-14800": 410,"Intel Core Ultra i9-14850": 440
-    },
-    "GPUs": {
-      "RTX 2060": 220,"RTX 2070": 240,"RTX 2080": 260,"RTX 2080 Ti": 280,
-      "RTX 3060": 260,"RTX 3060 Ti": 280,"RTX 3070": 300,"RTX 3070 Ti": 320,"RTX 3080": 340,"RTX 3080 Ti": 360,"RTX 3090": 380,"RTX 3090 Ti": 400,
-      "RTX 4060": 320,"RTX 4070": 340,"RTX 4070 Ti": 360,"RTX 4080": 380,"RTX 4090": 440,
-      "RX 6600": 200,"RX 6600 XT": 220,"RX 6700 XT": 260,"RX 6800": 300,"RX 6800 XT": 320,"RX 6900 XT": 340,"RX 7900 XT": 360,"RX 7900 XTX": 400
-    }
+    "CPUs": {"Ryzen 5 3600": 180,"Ryzen 7 3700X": 200,"Intel i5-10600K": 190,"Intel i7-10700K": 210},
+    "GPUs": {"RTX 3060": 170,"RTX 3070": 200,"RTX 3080": 230,"RX 6700 XT": 180}
   },
   "1440p": {
-    "CPUs": {
-      "Ryzen 3 3100": 160,"Ryzen 3 3300X": 180,"Ryzen 5 3600": 200,"Ryzen 5 5600X": 220,
-      "Ryzen 7 3700X": 240,"Ryzen 7 5800X": 260,"Ryzen 9 5900X": 280,"Ryzen 9 7900X": 300,"Ryzen 9 7950X": 320,
-      "Intel i5-10400": 180,"Intel i5-11400": 200,"Intel i5-12400": 220,"Intel i5-13400": 240,"Intel i5-14400": 260,
-      "Intel i7-10700K": 240,"Intel i7-11700K": 260,"Intel i7-12700K": 280,"Intel i7-13700K": 300,"Intel i7-14700K": 320,
-      "Intel i9-10900K": 280,"Intel i9-11900K": 300,"Intel i9-12900K": 320,"Intel i9-13900K": 340,"Intel i9-14900K": 360,
-      "Intel Core Ultra i7-14800": 350,"Intel Core Ultra i9-14850": 380
-    },
-    "GPUs": {
-      "RTX 2060": 180,"RTX 2070": 200,"RTX 2080": 220,"RTX 2080 Ti": 240,
-      "RTX 3060": 220,"RTX 3060 Ti": 240,"RTX 3070": 260,"RTX 3070 Ti": 280,"RTX 3080": 300,"RTX 3080 Ti": 320,"RTX 3090": 340,"RTX 3090 Ti": 360,
-      "RTX 4060": 280,"RTX 4070": 300,"RTX 4070 Ti": 320,"RTX 4080": 340,"RTX 4090": 400,
-      "RX 6600": 160,"RX 6600 XT": 180,"RX 6700 XT": 220,"RX 6800": 260,"RX 6800 XT": 280,"RX 6900 XT": 300,"RX 7900 XT": 320,"RX 7900 XTX": 360
-    }
+    "CPUs": {"Ryzen 5 3600": 160,"Ryzen 7 3700X": 180,"Intel i5-10600K": 170,"Intel i7-10700K": 190},
+    "GPUs": {"RTX 3060": 140,"RTX 3070": 170,"RTX 3080": 200,"RX 6700 XT": 150}
   },
   "4K": {
-    "CPUs": {
-      "Ryzen 3 3100": 100,"Ryzen 3 3300X": 120,"Ryzen 5 3600": 140,"Ryzen 5 5600X": 160,
-      "Ryzen 7 3700X": 180,"Ryzen 7 5800X": 200,"Ryzen 9 5900X": 220,"Ryzen 9 7900X": 240,"Ryzen 9 7950X": 260,
-      "Intel i5-10400": 120,"Intel i5-11400": 140,"Intel i5-12400": 160,"Intel i5-13400": 180,"Intel i5-14400": 200,
-      "Intel i7-10700K": 180,"Intel i7-11700K": 200,"Intel i7-12700K": 220,"Intel i7-13700K": 240,"Intel i7-14700K": 260,
-      "Intel i9-10900K": 220,"Intel i9-11900K": 240,"Intel i9-12900K": 260,"Intel i9-13900K": 280,"Intel i9-14900K": 300,
-      "Intel Core Ultra i7-14800": 290,"Intel Core Ultra i9-14850": 320
-    },
-    "GPUs": {
-      "RTX 2060": 80,"RTX 2070": 100,"RTX 2080": 120,"RTX 2080 Ti": 140,
-      "RTX 3060": 120,"RTX 3060 Ti": 140,"RTX 3070": 160,"RTX 3070 Ti": 180,"RTX 3080": 200,"RTX 3080 Ti": 220,"RTX 3090": 240,"RTX 3090 Ti": 260,
-      "RTX 4060": 180,"RTX 4070": 200,"RTX 4070 Ti": 220,"RTX 4080": 240,"RTX 4090": 300,
-      "RX 6600": 80,"RX 6600 XT": 100,"RX 6700 XT": 140,"RX 6800": 180,"RX 6800 XT": 200,"RX 6900 XT": 220,"RX 7900 XT": 240,"RX 7900 XTX": 280
-    }
+    "CPUs": {"Ryzen 5 3600": 100,"Ryzen 7 3700X": 120,"Intel i5-10600K": 110,"Intel i7-10700K": 130},
+    "GPUs": {"RTX 3060": 80,"RTX 3070": 120,"RTX 3080": 160,"RX 6700 XT": 90}
   }
 }
