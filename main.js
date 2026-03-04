@@ -122,11 +122,12 @@ function updateChart(){
   const cpuValues = resolutions.map(r => gameData[game][r].CPUs[cpu]);
   const gpuValues = resolutions.map(r => gameData[game][r].GPUs[gpu]);
 
+  // ✅ define them FIRST (this fixes your error)
   const minValues = cpuValues.map((v,i)=>Math.min(v, gpuValues[i]));
   const maxValues = cpuValues.map((v,i)=>Math.max(v, gpuValues[i]));
   const avgValues = cpuValues.map((v,i)=>Math.round((v + gpuValues[i]) / 2));
 
-  // ---- top quick numbers (real FPS = bottleneck)
+  // ---- quick result numbers (bottleneck FPS)
   avg1080.textContent = minValues[0];
   avg1440.textContent = minValues[1];
   avg4k.textContent   = minValues[2];
@@ -144,7 +145,7 @@ function updateChart(){
   avg1440b.textContent = avgValues[1];
   avg4kb.textContent   = avgValues[2];
 
-  // ---- playability (competitive focus at 1440p)
+  // ---- playability (based on 1440p bottleneck)
   const p = minValues[1];
 
   let rating;
@@ -169,8 +170,7 @@ function updateChart(){
 
   updateTopComponents(game);
 
-  // ================== MAIN CHART ==================
-
+  // ---- main chart
   if(chart) chart.destroy();
 
   const ctx = document.getElementById('fpsChart').getContext('2d');
@@ -180,24 +180,9 @@ function updateChart(){
     data:{
       labels:resolutions,
       datasets:[
-        {
-          label:'CPU FPS',
-          data:cpuValues,
-          backgroundColor:'rgba(58,58,58,0.9)',
-          borderRadius:10
-        },
-        {
-          label:'GPU FPS',
-          data:gpuValues,
-          backgroundColor:'rgba(85,85,85,0.9)',
-          borderRadius:10
-        },
-        {
-          label:'Min (Bottleneck)',
-          data:minValues,
-          backgroundColor:'rgba(136,136,136,0.9)',
-          borderRadius:10
-        }
+        { label:'CPU FPS', data:cpuValues, borderRadius:10 },
+        { label:'GPU FPS', data:gpuValues, borderRadius:10 },
+        { label:'Min (Bottleneck)', data:minValues, borderRadius:10 }
       ]
     },
     options:{
@@ -207,9 +192,7 @@ function updateChart(){
     }
   });
 
-
-  // ================== DETAIL CHART ==================
-
+  // ---- detail chart
   if(detailChart) detailChart.destroy();
 
   const ctx2 = document.getElementById('detailChart').getContext('2d');
@@ -219,24 +202,9 @@ function updateChart(){
     data:{
       labels:resolutions,
       datasets:[
-        {
-          label:'Min FPS',
-          data:minValues,
-          backgroundColor:'rgba(90,90,90,0.9)',
-          borderRadius:8
-        },
-        {
-          label:'Avg FPS',
-          data:avgValues,
-          backgroundColor:'rgba(130,130,130,0.9)',
-          borderRadius:8
-        },
-        {
-          label:'Max FPS',
-          data:maxValues,
-          backgroundColor:'rgba(170,170,170,0.9)',
-          borderRadius:8
-        }
+        { label:'Min FPS', data:minValues, borderRadius:8 },
+        { label:'Avg FPS', data:avgValues, borderRadius:8 },
+        { label:'Max FPS', data:maxValues, borderRadius:8 }
       ]
     },
     options:{
@@ -244,7 +212,6 @@ function updateChart(){
       scales:{y:{beginAtZero:true}}
     }
   });
-
 }
 
 
