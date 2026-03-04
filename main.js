@@ -1,4 +1,8 @@
-// ================== DOM ==================
+function setText(id, value){
+  const el = document.getElementById(id);
+  if(el) el.textContent = value;
+  
+  // ================== DOM ==================
 
 const cpuSelect = document.getElementById('cpuSelect');
 const gpuSelect = document.getElementById('gpuSelect');
@@ -128,22 +132,23 @@ function updateChart(){
   const avgValues = cpuValues.map((v,i)=>Math.round((v + gpuValues[i]) / 2));
 
   // ---- quick result numbers (bottleneck FPS)
-  avg1080.textContent = minValues[0];
-  avg1440.textContent = minValues[1];
-  avg4k.textContent   = minValues[2];
+  setText('avg1080', minValues[0]);
+setText('avg1440', minValues[1]);
+setText('avg4k',   minValues[2]);
 
-  // ---- detailed summary
-  min1080.textContent = minValues[0];
-  min1440.textContent = minValues[1];
-  min4k.textContent   = minValues[2];
+setText('min1080', minValues[0]);
+setText('min1440', minValues[1]);
+setText('min4k',   minValues[2]);
 
-  max1080.textContent = maxValues[0];
-  max1440.textContent = maxValues[1];
-  max4k.textContent   = maxValues[2];
+setText('max1080', maxValues[0]);
+setText('max1440', maxValues[1]);
+setText('max4k',   maxValues[2]);
 
-  avg1080b.textContent = avgValues[0];
-  avg1440b.textContent = avgValues[1];
-  avg4kb.textContent   = avgValues[2];
+setText('avg1080b', avgValues[0]);
+setText('avg1440b', avgValues[1]);
+setText('avg4kb',   avgValues[2]);
+
+setText('playabilityText', rating);
 
   // ---- playability (based on 1440p bottleneck)
   const p = minValues[1];
